@@ -71,15 +71,21 @@ export class Renderer {
       elements,
       editingTextElement,
       newElementId,
+      includeGmElements,
     }: {
       elements: readonly NonDeletedExcalidrawElement[];
       editingTextElement: AppState["editingTextElement"];
       newElementId: ExcalidrawElement["id"] | undefined;
+      includeGmElements: boolean;
     }) => {
       const elementsMap = toBrandedType<RenderableElementsMap>(new Map());
 
       for (const element of elements) {
         if (newElementId === element.id) {
+          continue;
+        }
+
+        if (!includeGmElements && element.isGmOnly) {
           continue;
         }
 
@@ -107,6 +113,7 @@ export class Renderer {
         width,
         editingTextElement,
         newElementId,
+        includeGmElements,
         // cache-invalidation nonce
         sceneNonce: _sceneNonce,
       }: {
@@ -121,6 +128,7 @@ export class Renderer {
         /** note: first render of newElement will always bust the cache
          * (we'd have to prefilter elements outside of this function) */
         newElementId: ExcalidrawElement["id"] | undefined;
+        includeGmElements: boolean;
         sceneNonce: ReturnType<InstanceType<typeof Scene>["getSceneNonce"]>;
       }) => {
         const elements = this.scene.getNonDeletedElements();
@@ -129,6 +137,7 @@ export class Renderer {
           elements,
           editingTextElement,
           newElementId,
+          includeGmElements,
         });
 
         const visibleElements = getVisibleCanvasElements({

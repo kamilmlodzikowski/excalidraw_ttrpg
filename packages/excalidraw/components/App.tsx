@@ -1520,6 +1520,7 @@ class App extends React.Component<AppProps, AppState> {
         width: this.state.width,
         editingTextElement: this.state.editingTextElement,
         newElementId: this.state.newElement?.id,
+        includeGmElements: this.state.isGmMode,
       });
     this.visibleElements = visibleElements;
 
@@ -4327,6 +4328,20 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       if (this.actionManager.handleKeyDown(event)) {
+        return;
+      }
+
+      // toggle GM mode visibility
+      if (event[KEYS.CTRL_OR_CMD] && event.altKey && event.key === KEYS.G) {
+        this.setState({ isGmMode: !this.state.isGmMode });
+        return;
+      }
+      // toggle GM-only flag on selected elements
+      if (event[KEYS.CTRL_OR_CMD] && event.shiftKey && event.key === KEYS.H) {
+        const selected = this.scene.getSelectedElements(this.state);
+        selected.forEach((el) =>
+          this.mutateElement(el, { isGmOnly: !el.isGmOnly })
+        );
         return;
       }
 
