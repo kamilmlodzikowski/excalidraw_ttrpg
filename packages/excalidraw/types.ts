@@ -384,6 +384,8 @@ export interface AppState {
   gridStep: number;
   gridModeEnabled: boolean;
   viewModeEnabled: boolean;
+  /** toggles visibility of GM-only elements */
+  isGmMode: boolean;
 
   /** top-most selected groups (i.e. does not include nested groups) */
   selectedGroupIds: { [groupId: string]: boolean };

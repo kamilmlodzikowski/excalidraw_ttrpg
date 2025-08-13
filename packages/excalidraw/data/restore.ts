@@ -156,8 +156,9 @@ const repairBinding = <T extends ExcalidrawLinearElement>(
 };
 
 const restoreElementWithProperties = <
-  T extends Required<Omit<ExcalidrawElement, "customData">> & {
+  T extends Required<Omit<ExcalidrawElement, "customData" | "isGmOnly">> & {
     customData?: ExcalidrawElement["customData"];
+    isGmOnly?: ExcalidrawElement["isGmOnly"];
     /** @deprecated */
     boundElementIds?: readonly ExcalidrawElement["id"][];
     /** @deprecated */
@@ -172,7 +173,12 @@ const restoreElementWithProperties = <
     // @ts-ignore TS complains here but type checks the call sites fine.
     keyof K
   > &
-    Partial<Pick<ExcalidrawElement, "type" | "x" | "y" | "customData">>,
+    Partial<
+      Pick<
+        ExcalidrawElement,
+        "type" | "x" | "y" | "customData" | "isGmOnly"
+      >
+    >,
 ): T => {
   const base: Pick<T, keyof ExcalidrawElement> = {
     type: extra.type || element.type,
@@ -217,6 +223,7 @@ const restoreElementWithProperties = <
     updated: element.updated ?? getUpdatedTimestamp(),
     link: element.link ? normalizeLink(element.link) : null,
     locked: element.locked ?? false,
+    isGmOnly: element.isGmOnly ?? false,
   };
 
   if ("customData" in element || "customData" in extra) {

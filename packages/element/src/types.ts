@@ -78,8 +78,10 @@ type _ExcalidrawElementBase = Readonly<{
   updated: number;
   link: string | null;
   locked: boolean;
+  /** whether element should be hidden from non-GM users */
+  isGmOnly?: boolean;
   customData?: Record<string, any>;
-}>;
+}>; 
 
 export type ExcalidrawSelectionElement = _ExcalidrawElementBase & {
   type: "selection";

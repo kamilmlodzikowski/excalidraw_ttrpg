@@ -73,6 +73,7 @@ export type ElementConstructorOpts = MarkOptional<
   | "locked"
   | "opacity"
   | "customData"
+  | "isGmOnly"
 >;
 
 const _newElementBase = <T extends ExcalidrawElement>(
@@ -97,6 +98,7 @@ const _newElementBase = <T extends ExcalidrawElement>(
     boundElements = null,
     link = null,
     locked = DEFAULT_ELEMENT_PROPS.locked,
+    isGmOnly = false,
     ...rest
   }: ElementConstructorOpts & Omit<Partial<ExcalidrawGenericElement>, "type">,
 ) => {
@@ -150,6 +152,7 @@ const _newElementBase = <T extends ExcalidrawElement>(
     updated: getUpdatedTimestamp(),
     link,
     locked,
+    isGmOnly,
     customData: rest.customData,
   };
   return element;
